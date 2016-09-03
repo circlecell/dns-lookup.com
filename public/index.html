@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.3/css/bootstrap.min.css" integrity="sha384-MIwDKRSSImVFAZCVLtU0LMDdON6KVCrZHyVQQj6e8wIEJkW4tvwqXrbMIya1vriY" crossorigin="anonymous">
+
+        <title>Test</title>
+    </head>
+    <body>
+        <h1></h1>
+        <form>
+            <div class="form-group">
+                <input type="text" class="form-control host-name" placeholder="Domain name">
+                <button type="submit" class="btn btn-default">Submit</button>
+            </div>
+        </form>
+        <table class="table">
+
+            <thead>
+                <tr>
+                    <th>Type
+                    <th>Ttl
+                </tr>
+            </thead>
+            <tbody></tbody>
+            <tfoot>
+                <tr><td>No data
+            </tfoot>
+        </table>
+        <script src="https://matreshkajs.github.io/bundle/matreshka.min.js"></script>
+        <script>
+            window.app = new class Table extends Matreshka.Array {
+                itemRenderer() {
+                    return `<tr>
+                        <th>{{typeStr}}</th>
+                        <td>{{ttl}}</td>
+                    </tr>`
+                }
+
+                constructor() {
+                    super()
+                        .bindNode('sandbox', 'body')
+                        .bindNode('hostName', ':sandbox .host-name')
+                        .bindNode('container', ':sandbox tbody')
+                        .bindNode('length', ':sandbox tfoot', Matreshka.binders.display(false))
+                        .on('submit::(form)', evt => {
+                            evt.preventDefault();
+                            this.lookup();
+                        })
+                }
+
+                lookup() {
+                    fetch('api/lookup/', {
+                        method: 'post',
+                        body: JSON.stringify({
+                            hostName: this.hostName
+                        }),
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then(resp => resp.json())
+                    .then(({ error, data }) => {
+                        if(error) {
+                            alert(error);
+                        } else {
+                            console.log(data);
+                            this.recreate(data);
+                        }
+                    })
+                    .catch(error => alert(error));
+                }
+
+                patch() {
+                    // group by type
+                    const types = {
+                        1: { type: 'A', valueKey: 'address' },
+                        2: { type: 'NS', valueKey: 'data' },
+                        5: { type: 'CNAME' },
+                        6: { type: 'SOA' },
+                        15: { type: 'MX', valueKey: 'exchange' },
+                        16: { type: 'TXT', valueKey: 'data' },
+                        28: { type: 'AAAA', valueKey: 'address' },
+                        33: { type: 'SRV' },
+                        35: { type: 'NAPTR' }
+                    }
+                }
+            }
+        </script>
+    </body>
+</html>
