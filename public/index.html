@@ -19,7 +19,9 @@
             <thead>
                 <tr>
                     <th>Type
-                    <th>Ttl
+                    <th>TTL
+                    <th>Priority
+                    <th>Data
                 </tr>
             </thead>
             <tbody></tbody>
@@ -34,6 +36,8 @@
                     return `<tr>
                         <th>{{typeStr}}</th>
                         <td>{{ttl}}</td>
+                        <td>{{priority}}</td>
+                        <td>{{dataStr}}</td>
                     </tr>`
                 }
 
@@ -65,25 +69,39 @@
                             alert(error);
                         } else {
                             console.log(data);
-                            this.recreate(data);
+                            this.recreate(this.patch(data));
                         }
                     })
-                    .catch(error => alert(error));
+                    .catch(error => { throw error });
                 }
 
-                patch() {
-                    // group by type
+                patch(data) {
+                    const newData = [];
+
                     const types = {
-                        1: { type: 'A', valueKey: 'address' },
-                        2: { type: 'NS', valueKey: 'data' },
-                        5: { type: 'CNAME' },
-                        6: { type: 'SOA' },
-                        15: { type: 'MX', valueKey: 'exchange' },
-                        16: { type: 'TXT', valueKey: 'data' },
-                        28: { type: 'AAAA', valueKey: 'address' },
-                        33: { type: 'SRV' },
-                        35: { type: 'NAPTR' }
+                        1: { type: 'A', getData: item => item.address },
+                        2: { type: 'NS', getData: item => item.data },
+                        5: { type: 'CNAME', getData: item => item.data },
+                        6: { type: 'SOA', getData: item => item.primary + ' ' + item.admin + ' ' + item.serial + ' ' + item.refresh + ' ' + item.retry + ' ' + item.expiration + ' ' + item.minimum },
+                        12: { type: 'PTR', getData: item => item.data },
+                        15: { type: 'MX',  getData: item => item.exchange + ' ' + item.priority },
+                        16: { type: 'TXT', getData: item => item.data },
+                        28: { type: 'AAAA', getData: item => item.address },
+                        33: { type: 'SRV', getData: item => item.weight + ' ' + item.port + ' ' + item.weight },
+                        35: { type: 'NAPTR', getData: item => item.data }
                     }
+
+                    for(const item of data) {
+                        if(!types[item.type]) {
+                            continue;
+                        }
+                        const type = types[item.type].type;
+                        item.typeStr = type;
+                        item.dataStr = types[item.type].getData(item);
+                        newData.push(item)
+                    }
+
+                    return newData;
                 }
             }
         </script>
