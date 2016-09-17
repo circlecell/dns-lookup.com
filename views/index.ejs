@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/css/bootstrap.css">
+</head>
+<body class="container">
+
+    <main>
+        <div class="row">
+            <div class="col-sm-12">
+                <form name="lookup">
+                  <div class="form-group">
+                    <label for="domain">Domain</label>
+                    <input type="text" name="domain" class="form-control" id="domain" placeholder="Domain">
+                  </div>
+                  <button type="submit" class="btn btn-default">Submit</button>
+                </form>
+
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        document.forms.lookup.addEventListener('submit', function(evt) {
+            evt.preventDefault();
+            var domain = this.domain.value.replace(/https?:\/\//, '');
+
+            location.href = domain;
+        });
+    </script>
+
+</body>
+</html>

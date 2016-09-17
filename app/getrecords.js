@@ -1,8 +1,4 @@
-var express    = require('express');        // call express
-var app        = express();                 // define our app using express
-var bodyParser = require('body-parser');
 var dns = require('native-dns');
-
 const types = {
     1: 'A',
     2: 'NS',
@@ -15,25 +11,7 @@ const types = {
     35: 'NAPTR'
 }
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-
-var port = process.env.PORT || 8085;
-
-app.use(express.static('public'));
-
-
-var router = express.Router();
-
-router.post('/lookup', function(req, res) {
-    getRecords(req.body.hostName)
-        .then(data => res.json({ data }))
-        .catch(error => res.json({ error }));
-});
-
-app.use('/api', router);
-
-app.listen(port);
+module.exports = getRecords;
 
 function getRecords(name, type = 'ANY') {
     return new Promise((resolve, reject) => {
@@ -54,13 +32,13 @@ function getRecords(name, type = 'ANY') {
                 return reject(err);
             }
 
-              resolve(answer.map(item => {
-                  item.typeStr = types[item.type];
-                  return item;
-              }));
+            resolve(answer.filter(item => {
+                //const typeStr = types[item.type];
+                //item.typeStr = typeStr;
+                return !!types[item.type];
+            }));
         });
 
         req.send();
     });
-
 }
