@@ -16,7 +16,7 @@ app.use(express.static('public'));
 
 app.set('view engine', 'ejs');
 
-var db = mongoose.connection;
+const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 
 app.get('/:domain/:id', wrap(function *(req, res, next) {

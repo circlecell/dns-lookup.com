@@ -1,15 +1,15 @@
-var dns = require('native-dns');
+const dns = require('native-dns');
 
 module.exports = getRecords;
 
 function getRecords(name, type = 'ANY') {
     return new Promise((resolve, reject) => {
-        var start = Date.now();
+        const start = Date.now();
 
-        var req = dns.Request({
-          question: dns.Question({ name, type }),
-          server: { address: '8.8.8.8', port: 53, type: 'udp' },
-          timeout: 5000
+        const req = dns.Request({
+            question: dns.Question({ name, type }),
+            server: { address: '8.8.8.8', port: 53, type: 'udp' },
+            timeout: 5000
         });
 
         req.on('timeout', function () {

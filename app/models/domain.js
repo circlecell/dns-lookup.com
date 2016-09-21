@@ -1,8 +1,8 @@
-var mongoose = require('mongoose');
-var schema = mongoose.Schema({
+const mongoose = require('mongoose');
+const schema = mongoose.Schema({
     name: String,
     timestamp: Number,
-    records: Object
+    records: Array
 });
 
 module.exports = mongoose.model('Domain', schema);
