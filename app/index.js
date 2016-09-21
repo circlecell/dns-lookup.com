@@ -8,8 +8,11 @@ const Domain = require('./models/domain');
 const getRecords = require('./getrecords');
 const wrap = require('co-express');
 const equalRecords = require('./equalrecords');
+const types = require('./types');
 
 mongoose.connect('mongodb://localhost/dnslookup');
+
+app.use(express.static('public'));
 
 app.set('view engine', 'ejs');
 
@@ -27,7 +30,7 @@ app.get('/:domain/:id', wrap(function *(req, res, next) {
                 .sort({_id: 1})
                 .skip(skip)
                 .limit(1);
-                
+
         } catch(e) {
             req.error = e.message;
             next();
@@ -47,8 +50,7 @@ app.get('/:domain/:id', wrap(function *(req, res, next) {
 
 app.get('/:domain', wrap(function *(req, res, next) {
     const { domain } = req.params;
-
-    if(domain === 'favicon.ico') return;
+    const now = Date.now();
 
     let doc;
     try {
@@ -56,21 +58,27 @@ app.get('/:domain', wrap(function *(req, res, next) {
             .sort({_id: -1})
             .skip(0)
             .limit(1);
+
     } catch(e) {
         req.error = err.message;
         return next();
     }
 
-    const records = yield getRecords(domain);
+    let records;
+    try {
+        records = yield getRecords(domain);
+    } catch(e) {
+        req.error = e.message;
+        return next();
+    }
 
     records.forEach(item => {
-        delete item.ttl;
-        delete item.class;
-        //item.foo = Math.random()
+        delete item.name;
     });
 
+    records.sort((a, b) => types[a.type] > types[b.type] ? 1 : -1);
 
-    if(!doc || !equalRecords(doc.records, records)) {
+    if(!doc || !equalRecords(doc.records, records) && now - 24 * 60 * 60 * 1000 > doc.timestamp) {
         const domainDocument = new Domain({
             name: domain,
             timestamp: Date.now(),
@@ -94,15 +102,23 @@ app.get('/:domain', wrap(function *(req, res, next) {
 
 app.get('/:domain/:id?', (req, res) => {
     const { data, error }  = req;
-    //data && console.log(`data: ${data}`);
-    //error && console.log(`error: ${error}`);
-    res.json({ data, error })
+
+    if(data) {
+        data.records = data.records.map(record => {
+            record.typeStr = types[record.type];
+            return record;
+        }).filter(({ typeStr }) => typeStr);
+
+        res.render('domain.ejs', { data, types });
+    } else {
+        res.render('error.ejs', { error });
+    }
+
 });
 
 app.get('/', function(req, res) {
     res.render('index.ejs');
 });
-
 
 app.listen(8080);
 console.log('8080 is the magic port');
