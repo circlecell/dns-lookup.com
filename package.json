@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "pm2 startOrRestart ecosystem.json --env production --watch",
+    "deploy": "pm2 deploy ecosystem.json production",
     "develop": "PORT=5002 nodemon app"
   },
   "repository": {
