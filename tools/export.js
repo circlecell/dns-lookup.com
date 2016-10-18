@@ -5,7 +5,7 @@ const cwd = __dirname;
 console.log('Starting mongodb export.');
 
 execSync(`
-    git clone git@github.com:circlecell/dnslookup-backup.git dnslookup-backup 2>&1 &&
+    git clone git@github.com:circlecell/dnslookup-backup.git dnslookup-backup &&
     mongoexport --db dnslookup --collection domains --out dnslookup-backup/domains.json &&
     cd dnslookup-backup &&
     git config user.email "andrey.a.gubanov@gmail.com" &&
