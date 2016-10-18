@@ -76,6 +76,7 @@ app.get('/:domain', wrap(function *(req, res, next) {
         delete item.name;
     });
 
+    // TODO Works wrong with gogol.com
     records.sort((a, b) => types[a.type] > types[b.type] ? 1 : -1);
 
     if(!doc || !equalRecords(doc.records, records) && now - 24 * 60 * 60 * 1000 > doc.timestamp) {
