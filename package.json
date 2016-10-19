@@ -1,5 +1,6 @@
 {
   "name": "dns-lookup.com",
+  "private": true,
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -10,7 +11,7 @@
     "check-updates": "ncu",
     "upgrade": "npm run check-updates -- --upgradeAll && npm install",
     "develop": "PORT=5002 nodemon app",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
+    "semantic-release": "semantic-release pre && npm run deploy && semantic-release post"
   },
   "config": {
     "validate-commit-msg": {
