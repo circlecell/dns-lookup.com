@@ -1,29 +1,27 @@
 const dns = require('native-dns');
 
-module.exports = getRecords;
-
 function getRecords(name, type = 'ANY') {
     return new Promise((resolve, reject) => {
-        const start = Date.now();
-
-        const req = dns.Request({
-            question: dns.Question({ name, type }),
+        const req = new dns.Request({
+            question: new dns.Question({ name, type }),
             server: { address: '8.8.8.8', port: 53, type: 'udp' },
             timeout: 5000
         });
 
-        req.on('timeout', function () {
+        req.on('timeout', () => {
             reject(new Error('Timeout in making request'));
         });
 
-        req.on('message', function (err, {answer} = {}) {
-            if(err) {
-                return reject(err);
+        req.on('message', (err, { answer } = {}) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(answer);
             }
-
-            resolve(answer);
         });
 
         req.send();
     });
 }
+
+module.exports = getRecords;

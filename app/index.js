@@ -1,6 +1,4 @@
-// findOne can be used
-// everything returns proxy, use them
-
+/* eslint-disable no-console */
 const express = require('express');
 const mongoose = require('mongoose');
 const Domain = require('./models/domain');
@@ -20,24 +18,23 @@ app.set('view engine', 'ejs');
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 
-app.get('/:domain/:id', wrap(function *(req, res, next) {
+app.get('/:domain/:id', wrap(function* getDomainFieldByIndex(req, res, next) {
     const { domain, id } = req.params;
     const skip = +id - 1;
 
-    if(skip >= 0) {
+    if (skip >= 0) {
         let doc;
         try {
             doc = yield Domain.findOne({ name: domain })
-                .sort({_id: 1})
+                .sort({ _id: 1 })
                 .skip(skip)
                 .limit(1);
-
-        } catch(e) {
+        } catch (e) {
             req.error = e.message;
             next();
         }
 
-        if(!doc) {
+        if (!doc) {
             res.redirect(`/${domain}`);
         } else {
             req.data = doc;
@@ -47,20 +44,21 @@ app.get('/:domain/:id', wrap(function *(req, res, next) {
         req.error = 'index is wrong';
         return next();
     }
+
+    return undefined;
 }));
 
-app.get('/:domain', wrap(function *(req, res, next) {
+app.get('/:domain', wrap(function* getDomainOrLastDomanField(req, res, next) {
     const { domain } = req.params;
     const now = Date.now();
 
     let doc;
     try {
         doc = yield Domain.findOne({ name: domain })
-            .sort({_id: -1})
+            .sort({ _id: -1 })
             .skip(0)
             .limit(1);
-
-    } catch(e) {
+    } catch (err) {
         req.error = err.message;
         return next();
     }
@@ -68,19 +66,21 @@ app.get('/:domain', wrap(function *(req, res, next) {
     let records;
     try {
         records = yield getRecords(domain);
-    } catch(e) {
+    } catch (e) {
         req.error = e.message;
         return next();
     }
 
-    records.forEach(item => {
+    records.forEach((item) => {
         delete item.name;
     });
 
     // TODO Works wrong with gogol.com
-    records.sort((a, b) => types[a.type] > types[b.type] ? 1 : -1);
+    records.sort((a, b) => (types[a.type] > types[b.type] ? 1 : -1));
 
-    if(!doc || !equalRecords(doc.records, records) && now - 24 * 60 * 60 * 1000 > doc.timestamp) {
+    if (!doc
+        || (!equalRecords(doc.records, records)
+            && now - (24 * 60 * 60 * 1000) > doc.timestamp)) {
         const domainDocument = new Domain({
             name: domain,
             timestamp: Date.now(),
@@ -90,23 +90,23 @@ app.get('/:domain', wrap(function *(req, res, next) {
         try {
             const savedDoc = yield domainDocument.save();
             req.data = savedDoc;
-        } catch(e) {
+        } catch (e) {
             req.error = e.message;
         }
 
         return next();
-    } else {
-        req.data = doc;
-        return next();
     }
+
+    req.data = doc;
+    return next();
 }));
 
 
 app.get('/:domain/:id?', (req, res) => {
-    const { data, error }  = req;
+    const { data, error } = req;
 
-    if(data) {
-        data.records = data.records.map(record => {
+    if (data) {
+        data.records = data.records.map((record) => {
             record.typeStr = types[record.type];
             return record;
         }).filter(({ typeStr }) => typeStr);
@@ -115,10 +115,9 @@ app.get('/:domain/:id?', (req, res) => {
     } else {
         res.render('error.ejs', { error });
     }
-
 });
 
-app.get('/', function(req, res) {
+app.get('/', (req, res) => {
     res.render('index.ejs');
 });
 

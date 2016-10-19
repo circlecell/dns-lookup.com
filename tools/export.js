@@ -1,5 +1,7 @@
 #!/usr/bin/env node
+/* eslint-disable no-console */
 const { execSync } = require('child_process');
+
 const cwd = __dirname;
 
 console.log('Starting mongodb export.');

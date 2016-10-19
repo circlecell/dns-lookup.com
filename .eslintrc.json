@@ -9,7 +9,8 @@
         "no-var": "error",
         "comma-dangle": ["error", "never"],
         "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
-        "global-require": 0
+        "no-param-reassign": ["error", { "props": false }],
+        "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }]
     },
     "env": {
         "browser": true,
