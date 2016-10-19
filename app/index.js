@@ -2,13 +2,14 @@
 // everything returns proxy, use them
 
 const express = require('express');
-const app = express();
 const mongoose = require('mongoose');
 const Domain = require('./models/domain');
 const getRecords = require('./getrecords');
 const wrap = require('co-express');
 const equalRecords = require('./equalrecords');
 const types = require('./types');
+
+const app = express();
 
 mongoose.connect('mongodb://localhost/dnslookup');
 
