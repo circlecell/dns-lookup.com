@@ -7,6 +7,8 @@
     "start": "pm2 startOrRestart ecosystem.json --env production --watch",
     "deploy": "pm2 deploy ecosystem.json production",
     "travis-deploy": "if-env TRAVIS_BRANCH=master TRAVIS_PULL_REQUEST=false && npm run semantic-release || echo 'Deploy is not run'",
+    "check-updates": "ncu",
+    "upgrade": "npm run check-updates -- --upgradeAll && npm install",
     "develop": "PORT=5002 nodemon app",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
@@ -48,6 +50,7 @@
     "if-env": "^1.0.0",
     "last-release-git": "0.0.1",
     "nodemon": "^1.10.2",
+    "npm-check-updates": "^2.8.5",
     "semantic-release": "^4.3.5",
     "validate-commit-msg": "^2.8.2"
   },
