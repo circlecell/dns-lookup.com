@@ -1,17 +1,37 @@
 {
   "name": "dns-lookup.com",
-  "version": "0.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "pm2 startOrRestart ecosystem.json --env production --watch",
     "deploy": "pm2 deploy ecosystem.json production",
-    "develop": "PORT=5002 nodemon app"
+    "travis-deploy": "if-env TRAVIS_BRANCH=master TRAVIS_PULL_REQUEST=false && npm run semantic-release || echo 'Deploy is not run'",
+    "develop": "PORT=5002 nodemon app",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
+  },
+  "config": {
+    "validate-commit-msg": {
+      "types": [
+        "feat",
+        "fix",
+        "refactor",
+        "perf",
+        "test",
+        "chore",
+        "revert"
+      ]
+    },
+    "ghooks": {
+      "commit-msg": "validate-commit-msg"
+    }
+  },
+  "release": {
+    "getLastRelease": "last-release-git"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/circlecell/dns-lookup.com.git"
+    "url": "https://github.com/circlecell/dns-lookup.com.git"
   },
   "keywords": [
     "dns",
@@ -24,7 +44,11 @@
   },
   "homepage": "https://github.com/circlecell/dns-lookup.com#readme",
   "devDependencies": {
-    "nodemon": "^1.10.2"
+    "ghooks": "^1.3.2",
+    "last-release-git": "0.0.1",
+    "nodemon": "^1.10.2",
+    "semantic-release": "^4.3.5",
+    "validate-commit-msg": "^2.8.2"
   },
   "dependencies": {
     "body-parser": "^1.15.2",
