@@ -45,6 +45,7 @@
   "homepage": "https://github.com/circlecell/dns-lookup.com#readme",
   "devDependencies": {
     "ghooks": "^1.3.2",
+    "if-env": "^1.0.0",
     "last-release-git": "0.0.1",
     "nodemon": "^1.10.2",
     "semantic-release": "^4.3.5",
