@@ -11,7 +11,7 @@
     "check-updates": "ncu",
     "upgrade": "npm run check-updates -- --upgradeAll && npm install",
     "develop": "PORT=5002 nodemon app",
-    "semantic-release": "semantic-release pre && npm run deploy && semantic-release post"
+    "semantic-release": "semantic-release pre && git stash && ssh-keyscan 192.241.157.86 >> ~/.ssh/known_hosts  && npm run deploy && git stash apply --index && semantic-release post"
   },
   "config": {
     "validate-commit-msg": {
