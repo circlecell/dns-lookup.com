@@ -17,7 +17,7 @@ app.set('view engine', 'ejs');
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 
-app.get('/:domain/:id', async function getDomainFieldByIndex(req, res, next) {
+app.get('/:domain/:id', async (req, res, next) => {
     const { domain, id } = req.params;
     const skip = +id - 1;
 
@@ -47,7 +47,7 @@ app.get('/:domain/:id', async function getDomainFieldByIndex(req, res, next) {
     return undefined;
 });
 
-app.get('/:domain', async function getDomainOrLastDomanField(req, res, next) {
+app.get('/:domain', async (req, res, next) => {
     const { domain } = req.params;
     const now = Date.now();
 
