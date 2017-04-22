@@ -3,7 +3,6 @@ const express = require('express');
 const mongoose = require('mongoose');
 const Domain = require('./models/domain');
 const getRecords = require('./getrecords');
-const wrap = require('co-express');
 const equalRecords = require('./equalrecords');
 const types = require('./types');
 
@@ -18,14 +17,14 @@ app.set('view engine', 'ejs');
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 
-app.get('/:domain/:id', wrap(function* getDomainFieldByIndex(req, res, next) {
+app.get('/:domain/:id', async function getDomainFieldByIndex(req, res, next) {
     const { domain, id } = req.params;
     const skip = +id - 1;
 
     if (skip >= 0) {
         let doc;
         try {
-            doc = yield Domain.findOne({ name: domain })
+            doc = await Domain.findOne({ name: domain })
                 .sort({ _id: 1 })
                 .skip(skip)
                 .limit(1);
@@ -46,15 +45,15 @@ app.get('/:domain/:id', wrap(function* getDomainFieldByIndex(req, res, next) {
     }
 
     return undefined;
-}));
+});
 
-app.get('/:domain', wrap(function* getDomainOrLastDomanField(req, res, next) {
+app.get('/:domain', async function getDomainOrLastDomanField(req, res, next) {
     const { domain } = req.params;
     const now = Date.now();
 
     let doc;
     try {
-        doc = yield Domain.findOne({ name: domain })
+        doc = await Domain.findOne({ name: domain })
             .sort({ _id: -1 })
             .skip(0)
             .limit(1);
@@ -65,7 +64,7 @@ app.get('/:domain', wrap(function* getDomainOrLastDomanField(req, res, next) {
 
     let records;
     try {
-        records = yield getRecords(domain);
+        records = await getRecords(domain);
     } catch (e) {
         req.error = e.message;
         return next();
@@ -88,7 +87,7 @@ app.get('/:domain', wrap(function* getDomainOrLastDomanField(req, res, next) {
         });
 
         try {
-            const savedDoc = yield domainDocument.save();
+            const savedDoc = await domainDocument.save();
             req.data = savedDoc;
         } catch (e) {
             req.error = e.message;
@@ -99,7 +98,7 @@ app.get('/:domain', wrap(function* getDomainOrLastDomanField(req, res, next) {
 
     req.data = doc;
     return next();
-}));
+});
 
 
 app.get('/:domain/:id?', (req, res) => {
