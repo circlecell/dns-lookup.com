@@ -8,7 +8,7 @@
     "test": "npm run lint",
     "lint": "eslint . --cache",
     "start": "pm2 startOrRestart ecosystem.json --env production --watch",
-    "deploy": "pm2 deploy ecosystem.json production --force && killall -9 nodejs",
+    "deploy": "pm2 deploy ecosystem.json production --force",
     "travis-deploy": "if-env TRAVIS_BRANCH=master TRAVIS_PULL_REQUEST=false && npm run semantic-release || echo 'Deploy is not run'",
     "upgrade": "ncu --upgradeAll && npm install",
     "develop": "PORT=5002 concurrently 'nodemon --inspect app' 'opn http://localhost:${PORT}'",
