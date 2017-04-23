@@ -1,10 +1,12 @@
 /* eslint-disable no-console */
 const express = require('express');
 const mongoose = require('mongoose');
+const { groupBy } = require('lodash');
 const Domain = require('./models/domain');
 const getRecords = require('./getrecords');
 const equalRecords = require('./equalrecords');
 const types = require('./types');
+const recordsInfo = require('./recordsInfo');
 
 const app = express();
 
@@ -29,14 +31,14 @@ app.get('/:domain/:id', async (req, res, next) => {
                 .skip(skip)
                 .limit(1);
         } catch (e) {
-            req.error = e.message;
+            req.error = e;
             next();
         }
 
         if (!doc) {
             res.redirect(`/${domain}`);
         } else {
-            req.data = doc;
+            req.doc = doc;
             next();
         }
     } else {
@@ -47,26 +49,25 @@ app.get('/:domain/:id', async (req, res, next) => {
     return undefined;
 });
 
+
+app.get('/favicon.ico', (req, res) => {
+    res.status(404).send('TODO: Add favicon');
+});
+
 app.get('/:domain', async (req, res, next) => {
     const { domain } = req.params;
     const now = Date.now();
 
-    let doc;
-    try {
-        doc = await Domain.findOne({ name: domain })
-            .sort({ _id: -1 })
-            .skip(0)
-            .limit(1);
-    } catch (err) {
-        req.error = err.message;
-        return next();
-    }
+    const doc = await Domain.findOne({ name: domain })
+        .sort({ _id: -1 })
+        .skip(0)
+        .limit(1);
 
     let records;
     try {
         records = await getRecords(domain);
     } catch (e) {
-        req.error = e.message;
+        req.error = e;
         return next();
     }
 
@@ -77,9 +78,9 @@ app.get('/:domain', async (req, res, next) => {
     // TODO Works wrong with gogol.com
     records.sort((a, b) => (types[a.type] > types[b.type] ? 1 : -1));
 
-    if (!doc
-        || (!equalRecords(doc.records, records)
-            && now - (24 * 60 * 60 * 1000) > doc.timestamp)) {
+    if (
+        !doc || (!equalRecords(doc.records, records) && now - (24 * 60 * 60 * 1000) > doc.timestamp)
+    ) {
         const domainDocument = new Domain({
             name: domain,
             timestamp: Date.now(),
@@ -88,36 +89,37 @@ app.get('/:domain', async (req, res, next) => {
 
         try {
             const savedDoc = await domainDocument.save();
-            req.data = savedDoc;
+            req.doc = savedDoc;
         } catch (e) {
-            req.error = e.message;
+            req.error = e;
         }
 
         return next();
     }
 
-    req.data = doc;
+    req.doc = doc;
     return next();
 });
 
 
 app.get('/:domain/:id?', (req, res) => {
-    const { data, error } = req;
+    const { doc, error } = req;
 
-    if (data) {
-        data.records = data.records.map((record) => {
-            record.typeStr = types[record.type];
-            return record;
-        }).filter(({ typeStr }) => typeStr);
+    if (!error) {
+        const records = doc.records.filter(({ type }) => type in types);
+        const data = groupBy(records, 'type');
+        const { name: domain } = doc;
 
-        res.render('domain.ejs', { data, types });
+        res.render('layout.ejs', { data, domain, types, recordsInfo });
     } else {
-        res.render('error.ejs', { error });
+        res.render('layout.ejs', { error });
     }
 });
 
+
 app.get('/', (req, res) => {
-    res.render('index.ejs');
+    res.render('layout.ejs');
 });
+
 
 app.listen(process.env.PORT);

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include partials/head %>
+    <body>
+        <%- include partials/header %>
+        <div class="container">
+            <%- include partials/ad-top %>
+            <%- include partials/lookup-form %>
+
+            <% if(typeof data === 'object') { %>
+                <%- include partials/results %>
+            <% } %>
+
+            <% if(typeof error !== 'undefined') { %>
+                <h2>
+                    An error is occurred: <span class="mono"><%= error %></span>
+                </h2>
+            <% } %>
+
+            <%- include partials/ad-partners %>
+
+            <%- include partials/info %>
+
+            <%- include partials/ad-bottom %>
+            <footer>&copy; 2017 DNS-Lookup.com</footer>
+        </div>
+    </body>
+</html>

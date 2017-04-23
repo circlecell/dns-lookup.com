@@ -1,0 +1,16 @@
+<form name="lookup">
+    <div class="form-group">
+        <input type="text" name="domain" class="form-control" id="domain" placeholder="example.com" required>
+        <button type="submit" class="submit-button submit-button-default">Lookup</button>
+        <br>
+        <label>Enter the URL of your site and click <strong>Lookup</strong>.</label>
+    </div>
+</form>
+<script defer>
+    document.forms.lookup.addEventListener('submit', function(evt) {
+        evt.preventDefault();
+        var domain = this.domain.value.replace(/https?:\/\//, '');
+
+        location.href = domain;
+    });
+</script>

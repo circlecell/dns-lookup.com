@@ -1,5 +1,6 @@
 {
   "name": "dns-lookup.com",
+  "verion": "2.0.0",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -10,7 +11,7 @@
     "deploy": "pm2 deploy ecosystem.json production",
     "travis-deploy": "if-env TRAVIS_BRANCH=master TRAVIS_PULL_REQUEST=false && npm run semantic-release || echo 'Deploy is not run'",
     "upgrade": "ncu --upgradeAll && npm install",
-    "develop": "PORT=5002 concurrently 'nodemon app' 'opn http://localhost:${PORT}'",
+    "develop": "PORT=5002 concurrently 'nodemon --inspect app' 'opn http://localhost:${PORT}'",
     "semantic-release": "semantic-release pre && git stash && ssh-keyscan 192.241.157.86 >> ~/.ssh/known_hosts  && npm run deploy && git stash apply --index && semantic-release post"
   },
   "config": {
@@ -65,6 +66,7 @@
     "deep-equal": "^1.0.1",
     "ejs": "^2.5.6",
     "express": "^4.15.2",
+    "lodash": "^4.17.4",
     "mongoose": "^4.9.5",
     "native-dns": "^0.7.0"
   }

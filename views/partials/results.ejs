@@ -1,0 +1,47 @@
+<% const outNumTypes = Object.keys(data); %>
+
+<h2>
+    <%= outNumTypes.length ? '' : 'No' %>
+    DNS Information for <span class="mono"><%= domain %></span>
+</h2>
+
+
+
+<% for(let i = 0; i < outNumTypes.length; i++) {
+    const numType = outNumTypes[i];
+    const type = types[numType];
+    const { fields } = recordsInfo[type];
+    const fieldDisplayNames = Object.keys(fields);
+    const fieldKeys = Object.values(fields);
+    const records = data[numType];
+%>
+    <div class="table-data">
+        <table class="table outer">
+            <tbody>
+                <tr>
+                    <th rowspan="1000" class="type"><%= type %></th>
+                    <th class="class">Class</th>
+                    <th class="ttl">TTL</th>
+                    <% for(let j = 0; j < fieldDisplayNames.length; j++) { %>
+                        <th><%= fieldDisplayNames[j] %></th>
+                    <% } %>
+                </tr>
+                <% for(let k = 0; k < records.length; k++) { %>
+                    <tr>
+                        <td><%= records[k].class %></td>
+                        <td><%= records[k].ttl %></td>
+                        <% for(let j = 0; j < fieldKeys.length; j++) { %>
+                            <td>
+                                <%=
+                                    typeof fieldKeys[j] === 'function'
+                                        ? fieldKeys[j](records[k])
+                                        : records[k][fieldKeys[j]]
+                                %>
+                            </td>
+                        <% } %>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+<% } %>
