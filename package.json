@@ -8,11 +8,11 @@
     "test": "npm run lint",
     "lint": "eslint . --cache",
     "start": "pm2 startOrRestart ecosystem.json --env production --watch",
-    "deploy": "pm2 deploy ecosystem.json production",
+    "deploy": "pm2 deploy ecosystem.json production --force",
     "travis-deploy": "if-env TRAVIS_BRANCH=master TRAVIS_PULL_REQUEST=false && npm run semantic-release || echo 'Deploy is not run'",
     "upgrade": "ncu --upgradeAll && npm install",
     "develop": "PORT=5002 concurrently 'nodemon --inspect app' 'opn http://localhost:${PORT}'",
-    "semantic-release": "semantic-release pre && git stash && ssh-keyscan 192.241.157.86 >> ~/.ssh/known_hosts  && npm run deploy && git stash apply --index && semantic-release post"
+    "semantic-release": "semantic-release pre && ssh-keyscan 192.241.157.86 >> ~/.ssh/known_hosts && npm run deploy && semantic-release post"
   },
   "config": {
     "validate-commit-msg": {
