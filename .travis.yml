@@ -22,3 +22,5 @@ deploy:
   script: npm run travis-deploy
   on:
     branch: master
+post_deploy:
+- ps -axf
