@@ -469,6 +469,7 @@ button[type="reset"]:hover {
 }
 
 .bsa-ad {
+    display: none;
     margin: 40px 0 0;
     padding: 1.5em 1em;
     background-color: #E6EBF0;
