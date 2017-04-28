@@ -565,8 +565,10 @@ button[type="reset"]:hover {
 
 @media all and (max-width: 775px) {
     .description-title {
-        display: none
+        display: none;
     }
+    .ad.top { display: none; }
+    .form-group { margin-top: 40px; }
 }
 
 @media all and (max-width: 600px) {
