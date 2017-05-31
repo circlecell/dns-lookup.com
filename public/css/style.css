@@ -180,9 +180,6 @@ p.heading {
     margin: 20px 0 5px;
 }
 
-p code,
-li code {}
-
 .ads {
     color: #ababab;
     font-size: 12px;
@@ -212,11 +209,6 @@ li code {}
     border: 1px solid #e1e1e1;
     background: #f0f0f0;
     font-weight: 600;
-}
-
-.toggle,
-[id^=drop] {
-    display: none;
 }
 
 header {
@@ -273,6 +265,11 @@ nav:after {
     clear: both;
 }
 
+.toggle,
+[id^=drop] {
+    display: none;
+}
+
 nav ul {
     float: right;
     margin: 0;
@@ -315,12 +312,13 @@ nav ul li:hover>ul {
 }
 
 nav ul ul li {
-    width: 320px;
+    width: 240px;
     float: none;
     display: list-item;
     position: relative;
     border-bottom: 1px solid #f0f0f0;
     padding: 7px 0;
+    line-height: 20px;
 }
 
 nav ul ul li.jscompress {
@@ -336,7 +334,11 @@ nav ul ul li.compare {
 }
 
 nav ul ul li.dns {
-    border-left: 5px solid #C0392B;
+    border-left: 5px solid #26A65B;
+}
+
+nav ul ul li.comp {
+    border-left: 5px solid #3498DB;
 }
 
 nav ul ul li.keygen {
@@ -349,6 +351,10 @@ nav ul ul ul li {
     left: 300px;
 }
 
+.tagline-title {
+    font-size: 11px
+}
+
 li>a:only-child:after {
     content: '';
 }
@@ -357,8 +363,8 @@ li>a:only-child:after {
     position: relative;
     display: inline-block;
     width: 0.8em;
-    height: 0.65em;
-    margin: 9px 10px 0 0;
+    height: 0.8em;
+    margin: 7px 10px 0 0;
     border-top: 0.1em solid #333;
     border-bottom: 0.1em solid #333;
 }
@@ -366,7 +372,7 @@ li>a:only-child:after {
 .three-lines:before {
     content: "";
     position: absolute;
-    top: 0.25em;
+    top: 0.3em;
     left: 0;
     width: 100%;
     border-top: 0.1em solid #333;
@@ -592,8 +598,8 @@ button[type="reset"]:hover {
         display: none;
     }
     .three-lines {
-        margin: 9px 0 0 0
-    }
+	margin:7px 5px 0 0
+	}
     h2 {
         font-size: 16px;
     }
@@ -606,11 +612,8 @@ button[type="reset"]:hover {
 }
 
 @media all and (max-width: 500px) {
-    .sub-title,
-    .tagline-title {
+    .sub-title
+	{
         display: none
-    }
-    nav ul ul li {
-        width: 180px
     }
 }
