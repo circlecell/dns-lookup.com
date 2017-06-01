@@ -2,7 +2,6 @@ const dns = require('native-dns');
 const punycode = require('punycode');
 
 function getRecords(name, type = 'ANY') {
-
     return new Promise((resolve, reject) => {
         const req = new dns.Request({
             question: new dns.Question({
