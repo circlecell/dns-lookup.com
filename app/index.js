@@ -110,7 +110,9 @@ app.get('/:domain/:id?', (req, res) => {
         const data = groupBy(records, 'type');
         const { name: domain } = doc;
 
-        res.render('layout.ejs', { data, domain, types, recordsInfo });
+        res.render('layout.ejs', {
+            data, domain, types, recordsInfo
+        });
     } else {
         res.render('layout.ejs', { error });
     }

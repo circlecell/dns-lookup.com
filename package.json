@@ -10,7 +10,7 @@
     "start": "pm2 startOrRestart ecosystem.json --env production --watch",
     "deploy": "pm2 deploy ecosystem.json production --force",
     "travis-deploy": "if-env TRAVIS_BRANCH=master TRAVIS_PULL_REQUEST=false && npm run semantic-release || echo 'Deploy is not run'",
-    "upgrade": "ncu --upgradeAll && npm install",
+    "upgrade": "ncu --upgradeAll -x semantic-release && npm install",
     "develop": "PORT=5002 concurrently 'nodemon --inspect app' 'opn http://localhost:${PORT}'",
     "semantic-release": "semantic-release pre && ssh-keyscan 192.241.157.86 >> ~/.ssh/known_hosts && npm run deploy && semantic-release post"
   },
@@ -48,26 +48,26 @@
   },
   "homepage": "https://github.com/circlecell/dns-lookup.com#readme",
   "devDependencies": {
-    "concurrently": "^3.4.0",
-    "eslint": "^3.19.0",
-    "eslint-config-airbnb-base": "^11.1.3",
-    "eslint-plugin-import": "^2.2.0",
-    "ghooks": "^2.0.0",
-    "if-env": "^1.0.0",
+    "concurrently": "^3.5.1",
+    "eslint": "^4.17.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "ghooks": "^2.0.2",
+    "if-env": "^1.0.4",
     "last-release-git": "0.0.3",
-    "nodemon": "^1.11.0",
-    "npm-check-updates": "^2.11.0",
+    "nodemon": "^1.14.12",
+    "npm-check-updates": "^2.14.0",
     "opn-cli": "^3.1.0",
     "semantic-release": "^6.3.2",
-    "validate-commit-msg": "^2.12.1"
+    "validate-commit-msg": "^2.14.0"
   },
   "dependencies": {
-    "body-parser": "^1.17.1",
+    "body-parser": "^1.18.2",
     "deep-equal": "^1.0.1",
-    "ejs": "^2.5.6",
-    "express": "^4.15.2",
-    "lodash": "^4.17.4",
-    "mongoose": "^4.9.5",
+    "ejs": "^2.5.7",
+    "express": "^4.16.2",
+    "lodash": "^4.17.5",
+    "mongoose": "^5.0.3",
     "native-dns": "^0.7.0"
   }
 }
