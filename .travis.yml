@@ -6,7 +6,7 @@ branches:
   except:
   - "/^v\\d+\\.\\d+\\.\\d+$/"
 install:
-- npm install -g npm
+- npm install -g npm pm2
 - npm install
 before_install:
 - openssl aes-256-cbc -K $encrypted_d7ced99e2dc6_key -iv $encrypted_d7ced99e2dc6_iv
