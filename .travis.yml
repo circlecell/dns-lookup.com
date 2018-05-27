@@ -6,9 +6,8 @@ branches:
   except:
   - "/^v\\d+\\.\\d+\\.\\d+$/"
 install:
-- npm install -g yarn
-- yarn global add pm2
-- yarn install
+- npm install -g npm
+- npm install
 before_install:
 - openssl aes-256-cbc -K $encrypted_d7ced99e2dc6_key -iv $encrypted_d7ced99e2dc6_iv
   -in deploy_rsa.enc -out deploy_rsa -d
