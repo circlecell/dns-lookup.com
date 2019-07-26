@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "test": "npm run lint",
-    "lint": "eslint . --cache",
+    "lint": "eslint .",
     "start": "pm2 startOrRestart ecosystem.json --env production --watch",
     "deploy": "pm2 deploy ecosystem.json production --force",
     "travis-deploy": "if-env TRAVIS_BRANCH=master TRAVIS_PULL_REQUEST=false && npm run semantic-release || echo 'Deploy is not run'",
