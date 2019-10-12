@@ -13,8 +13,8 @@ function resolveAny(domain) {
 }
 
 const dnsResolvers = [
-  'resolve4', 'resolve6', 'resolveCname', 'resolveMx', 'resolveNaptr',
-  'resolveNs', 'resolvePtr', 'resolveSoa', 'resolveSrv', 'resolveTxt'
+  'resolve4', 'resolve6', 'resolveCname', 'resolveMx', 'resolveNs',
+  'resolveNaptr', 'resolvePtr', 'resolveSoa', 'resolveSrv', 'resolveTxt'
 ];
 
 function getTypeByDNSResolver(resolver) {
@@ -40,7 +40,7 @@ function resolveOneByOne(domain) {
         resolvedCount += 1;
 
         if (!e) {
-          if (typeof data[0] === 'string') {
+          //if (typeof data[0] === 'string') {
             // convert flat arrays into objects
             // { type: 'TXT', entries: ['foo']}
             // { type: 'CNAME', value: bar }
@@ -51,14 +51,39 @@ function resolveOneByOne(domain) {
 
               return { type: getTypeByDNSResolver(dnsResolver), value };
             }));*/
-          } else {
-            console.log('data', data)
-            allData.push(...(data instanceof Array ? data.map((item) => {
+          //} else {
+          console.log(dnsResolver, data);
+
+          switch(dnsResolver) {
+            case 'resolve4':
+            case 'resolve6':
+            case 'resolveNs':
+            case 'resolveCname':
+              allData.push(...data.map((value) => ({
+                type: getTypeByDNSResolver(dnsResolver),
+                value,
+              })))
+              break;
+            case 'resolveMx':
+              allData.push(...data.map((value) => ({
+                type: getTypeByDNSResolver(dnsResolver),
+                ...value,
+              })))
+              break;
+            case 'resolveSoa':
+            allData.push({
+              type: getTypeByDNSResolver(dnsResolver),
+              ...data,
+            })
+            default:
+            /*allData.push(...(data instanceof Array ? data.map((item) => {
               return { ...item, type: getTypeByDNSResolver(dnsResolver)}
             }) : [{
               ...data, type: getTypeByDNSResolver(dnsResolver)
-            }]));
+            }]));*/
           }
+
+        //   }
         } else {
           // console.log(domain, dnsResolver, e)
         }
