@@ -83,26 +83,22 @@ app.get('/:domain', async (req, res, next) => {
         });
 
         try {
-            const savedDoc = await domainDocument.save();
-            req.doc = savedDoc;
-        } catch (e) {
-            req.error = e;
-        }
-
-        return next();
+            await domainDocument.save();
+        } catch (e) { console.error(e); }
     }
-    req.doc = doc;
+
+    req.records = records;
+
     return next();
 });
 
 
 app.get('/:domain/:id?', (req, res) => {
-    const { doc, error } = req;
+    const { records, error } = req;
+    const { domain } = req.params;
 
     if (!error) {
-        const { records } = doc;
         const data = groupBy(records, 'type');
-        const { name: domain } = doc;
 
         res.render('layout.ejs', {
             data, domain
