@@ -79,9 +79,6 @@ app.get('/:domain', async (req, res, next) => {
     } catch (e) { console.error(e); }
   }
 
-  console.log('domain', domain);
-  console.log('records', records);
-
   req.records = records;
 
   return next();

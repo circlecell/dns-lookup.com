@@ -74,8 +74,6 @@ function resolveOneByOne(domain) {
               break;
             default:
           }
-
-        //   }
         }
 
         if (resolvedCount === dnsResolvers.length) {
