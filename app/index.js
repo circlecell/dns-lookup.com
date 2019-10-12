@@ -72,7 +72,7 @@ app.get('/:domain', async (req, res, next) => {
         req.error = e;
         return next();
     }
-/*
+
     if (
         !doc || (!equalRecords(doc.records, records) && now - (24 * 60 * 60 * 1000) > doc.timestamp)
     ) {
@@ -86,7 +86,10 @@ app.get('/:domain', async (req, res, next) => {
             await domainDocument.save();
         } catch (e) { console.error(e); }
     }
-*/
+
+    console.log('domain', domain);
+    console.log('records', records);
+
     req.records = records;
 
     return next();
