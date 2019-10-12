@@ -65,6 +65,8 @@ app.get('/:domain', async (req, res, next) => {
                     return reject(e);
                 }
 
+                console.log('RESOLVED', data);
+
                 return resolve(data);
             });
         });
