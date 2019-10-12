@@ -2,9 +2,9 @@ const dns = require('dns');
 const lodash = require('lodash');
 
 dns.setServers([
+  '1.1.1.1',
   '8.8.8.8',
   '8.8.4.4',
-  '1.1.1.1',
 ]);
 
 function resolveAny(domain) {
