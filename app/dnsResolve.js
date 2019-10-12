@@ -1,6 +1,13 @@
 const dns = require('dns');
 const lodash = require('lodash');
 
+dns.setServers([
+  '4.4.4.4',
+  '[2001:4860:4860::8888]',
+  '4.4.4.4:1053',
+  '[2001:4860:4860::8888]:1053',
+]);
+
 function resolveAny(domain) {
   return new Promise((resolve, reject) => {
     dns.resolveAny(domain, (e, data) => {
