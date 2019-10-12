@@ -2,11 +2,10 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const { groupBy } = require('lodash');
+const dns = require('dns');
+
 const Domain = require('./models/domain');
-const getRecords = require('./getrecords');
 const equalRecords = require('./equalrecords');
-const types = require('./types');
-const recordsInfo = require('./recordsInfo');
 
 const app = express();
 
@@ -49,11 +48,6 @@ app.get('/:domain/:id', async (req, res, next) => {
     return undefined;
 });
 
-
-app.get('/favicon.ico', (req, res) => {
-    res.status(404).send('TODO: Add favicon');
-});
-
 app.get('/:domain', async (req, res, next) => {
     const { domain } = req.params;
     const now = Date.now();
@@ -65,18 +59,19 @@ app.get('/:domain', async (req, res, next) => {
 
     let records;
     try {
-        records = await getRecords(domain);
+        records = await new Promise((resolve, reject) => {
+            dns.resolveAny(domain, { ttl: true }, (e, data) => {
+                if (e) {
+                    return reject(e);
+                }
+
+                return resolve(data);
+            });
+        });
     } catch (e) {
         req.error = e;
         return next();
     }
-
-    records.forEach((item) => {
-        delete item.name;
-    });
-
-    // TODO Works wrong with gogol.com
-    records.sort((a, b) => (types[a.type] > types[b.type] ? 1 : -1));
 
     if (
         !doc || (!equalRecords(doc.records, records) && now - (24 * 60 * 60 * 1000) > doc.timestamp)
@@ -96,7 +91,6 @@ app.get('/:domain', async (req, res, next) => {
 
         return next();
     }
-
     req.doc = doc;
     return next();
 });
@@ -106,12 +100,12 @@ app.get('/:domain/:id?', (req, res) => {
     const { doc, error } = req;
 
     if (!error) {
-        const records = doc.records.filter(({ type }) => type in types);
+        const { records } = doc;
         const data = groupBy(records, 'type');
         const { name: domain } = doc;
 
         res.render('layout.ejs', {
-            data, domain, types, recordsInfo
+            data, domain
         });
     } else {
         res.render('layout.ejs', { error });

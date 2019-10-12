@@ -6,12 +6,12 @@
   "main": "index.js",
   "scripts": {
     "test": "npm run lint",
-    "lint": "eslint .",
+    "lint": "eslint '*/**/*.js'",
     "start": "pm2 startOrRestart ecosystem.json --env production --watch",
     "deploy": "pm2 deploy ecosystem.json production --force",
     "travis-deploy": "if-env TRAVIS_BRANCH=master TRAVIS_PULL_REQUEST=false && npm run release || echo 'Deploy is not run'",
     "upgrade": "ncu -u && npm install",
-    "dev": "PORT=5002 concurrently 'nodemon --inspect app' 'opn http://localhost:${PORT}'",
+    "dev": "PORT=5002 concurrently 'nodemon --inspect app' 'open http://localhost:${PORT}'",
     "release": "ssh-keyscan 192.241.157.86 >> ~/.ssh/known_hosts && npm run deploy"
   },
   "config": {
@@ -46,24 +46,23 @@
   },
   "homepage": "https://github.com/circlecell/dns-lookup.com#readme",
   "devDependencies": {
-    "concurrently": "^4.1.1",
-    "eslint": "^6.1.0",
-    "eslint-config-airbnb-base": "^13.2.0",
+    "concurrently": "^5.0.0",
+    "eslint": "^6.5.1",
+    "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.18.2",
     "ghooks": "^2.0.4",
     "if-env": "^1.0.4",
-    "nodemon": "^1.19.1",
-    "npm-check-updates": "^3.1.20",
-    "opn-cli": "^5.0.0",
+    "nodemon": "^1.19.3",
+    "npm-check-updates": "^3.1.24",
+    "open-cli": "^5.0.0",
     "validate-commit-msg": "^2.14.0"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
-    "deep-equal": "^1.0.1",
-    "ejs": "^2.6.2",
+    "deep-equal": "^1.1.0",
+    "ejs": "^2.7.1",
     "express": "^4.17.1",
     "lodash": "^4.17.15",
-    "mongoose": "^5.6.6",
-    "native-dns": "^0.7.0"
+    "mongoose": "^5.7.4"
   }
 }
