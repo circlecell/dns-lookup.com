@@ -13,8 +13,8 @@ function resolveAny(domain) {
 }
 
 const dnsResolvers = [
-  'resolve4', 'resolve6', 'resolveCname', 'resolveMx', 'resolveNs',
-  'resolveNaptr', 'resolvePtr', 'resolveSoa', 'resolveSrv', 'resolveTxt'
+  'resolve4', 'resolve6', 'resolveCname', 'resolveMx', 'resolveNs', 'resolveSoa', 'resolveTxt'
+  /* 'resolveNaptr', 'resolvePtr', 'resolveSrv', */
 ];
 
 function getTypeByDNSResolver(resolver) {
@@ -40,47 +40,43 @@ function resolveOneByOne(domain) {
         resolvedCount += 1;
 
         if (!e) {
-          //if (typeof data[0] === 'string') {
-            // convert flat arrays into objects
-            // { type: 'TXT', entries: ['foo']}
-            // { type: 'CNAME', value: bar }
-            /*allData.push(data.map((value) => {
-              if (dnsResolver === 'resolveTxt') {
-                return { type: 'TXT', entries: value };
-              }
-
-              return { type: getTypeByDNSResolver(dnsResolver), value };
-            }));*/
-          //} else {
           console.log(dnsResolver, data);
 
-          switch(dnsResolver) {
+          switch (dnsResolver) {
             case 'resolve4':
             case 'resolve6':
             case 'resolveNs':
             case 'resolveCname':
               allData.push(...data.map((value) => ({
                 type: getTypeByDNSResolver(dnsResolver),
-                value,
-              })))
+                value
+              })));
               break;
             case 'resolveMx':
               allData.push(...data.map((value) => ({
                 type: getTypeByDNSResolver(dnsResolver),
-                ...value,
-              })))
+                ...value
+              })));
               break;
             case 'resolveSoa':
-            allData.push({
-              type: getTypeByDNSResolver(dnsResolver),
-              ...data,
-            })
+              allData.push({
+                type: getTypeByDNSResolver(dnsResolver),
+                ...data
+              });
+              break;
+            case 'resolveTxt':
+              allData.push(...data.map((value) => ({
+                type: getTypeByDNSResolver(dnsResolver),
+                entries: value
+              })));
+
+              break;
             default:
-            /*allData.push(...(data instanceof Array ? data.map((item) => {
+            /* allData.push(...(data instanceof Array ? data.map((item) => {
               return { ...item, type: getTypeByDNSResolver(dnsResolver)}
             }) : [{
               ...data, type: getTypeByDNSResolver(dnsResolver)
-            }]));*/
+            }])); */
           }
 
         //   }
@@ -97,7 +93,7 @@ function resolveOneByOne(domain) {
 }
 
 async function dnsResolve(domain) {
-  return resolveOneByOne(domain);
+  // return resolveOneByOne(domain);
   try {
     return await resolveAny(domain);
   } catch (e) {
