@@ -13,8 +13,8 @@ function resolveAny(domain) {
 }
 
 const dnsResolvers = [
-  'resolve4', 'resolve6', 'resolveCname', 'resolveMx', 'resolveNs', 'resolveSoa', 'resolveTxt'
-  /* 'resolveNaptr', 'resolvePtr', 'resolveSrv', */
+  'resolve4', 'resolve6', 'resolveCname', 'resolveMx', 'resolveNs', 'resolveSoa', 'resolveTxt', 'resolveSrv',
+  'resolveNaptr', 'resolvePtr',
 ];
 
 function getTypeByDNSResolver(resolver) {
@@ -40,48 +40,42 @@ function resolveOneByOne(domain) {
         resolvedCount += 1;
 
         if (!e) {
-          console.log(dnsResolver, data);
-
           switch (dnsResolver) {
             case 'resolve4':
             case 'resolve6':
             case 'resolveNs':
-            case 'resolveCname':
+            case 'resolveCname': // support.dnsimple.com
+            case 'resolvePtr': // 12.62.25.23.in-addr.arpa
               allData.push(...data.map((value) => ({
                 type: getTypeByDNSResolver(dnsResolver),
-                value
+                value,
               })));
               break;
             case 'resolveMx':
+            case 'resolveSrv': // _imaps._tcp.gmail.com
+            case 'resolveNaptr': // 4.4.2.2.3.3.5.6.8.1.4.4.e164.arpa
               allData.push(...data.map((value) => ({
                 type: getTypeByDNSResolver(dnsResolver),
-                ...value
+                ...value,
               })));
               break;
             case 'resolveSoa':
               allData.push({
                 type: getTypeByDNSResolver(dnsResolver),
-                ...data
+                ...data,
               });
               break;
             case 'resolveTxt':
               allData.push(...data.map((value) => ({
                 type: getTypeByDNSResolver(dnsResolver),
-                entries: value
+                entries: value,
               })));
 
               break;
             default:
-            /* allData.push(...(data instanceof Array ? data.map((item) => {
-              return { ...item, type: getTypeByDNSResolver(dnsResolver)}
-            }) : [{
-              ...data, type: getTypeByDNSResolver(dnsResolver)
-            }])); */
           }
 
         //   }
-        } else {
-          // console.log(domain, dnsResolver, e)
         }
 
         if (resolvedCount === dnsResolvers.length) {
@@ -93,7 +87,6 @@ function resolveOneByOne(domain) {
 }
 
 async function dnsResolve(domain) {
-  // return resolveOneByOne(domain);
   try {
     return await resolveAny(domain);
   } catch (e) {

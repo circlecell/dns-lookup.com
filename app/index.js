@@ -71,7 +71,7 @@ app.get('/:domain', async (req, res, next) => {
     const domainDocument = new Domain({
       name: domain,
       timestamp: Date.now(),
-      records
+      records,
     });
 
     try {
@@ -96,7 +96,7 @@ app.get('/:domain/:id?', (req, res) => {
     const data = groupBy(records, 'type');
 
     res.render('layout.ejs', {
-      data, domain
+      data, domain,
     });
   } else {
     res.render('layout.ejs', { error });
