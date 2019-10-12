@@ -1,4 +1,5 @@
 const dns = require('dns');
+const lodash = require('lodash');
 
 function resolveAny(domain) {
   return new Promise((resolve, reject) => {
@@ -77,7 +78,13 @@ function resolveOneByOne(domain) {
         }
 
         if (resolvedCount === dnsResolvers.length) {
-          resolve(allData);
+          resolve(
+            lodash(allData)
+              .toPairs()
+              .sortBy(0)
+              .fromPairs()
+              .value(),
+          );
         }
       });
     });
@@ -86,8 +93,10 @@ function resolveOneByOne(domain) {
 
 async function dnsResolve(domain) {
   try {
+    // sometimes resolveAny is rejected
     return await resolveAny(domain);
   } catch (e) {
+    // then resolve one type by one
     return resolveOneByOne(domain);
   }
 }
