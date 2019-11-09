@@ -53,7 +53,7 @@
     "ghooks": "^2.0.4",
     "if-env": "^1.0.4",
     "nodemon": "^1.19.4",
-    "npm-check-updates": "^3.2.0",
+    "npm-check-updates": "^3.2.1",
     "open-cli": "^5.0.0",
     "validate-commit-msg": "^2.14.0"
   },
@@ -63,6 +63,6 @@
     "ejs": "^2.7.1",
     "express": "^4.17.1",
     "lodash": "^4.17.15",
-    "mongoose": "^5.7.8"
+    "mongoose": "^5.7.9"
   }
 }
