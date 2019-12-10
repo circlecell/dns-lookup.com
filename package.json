@@ -10,9 +10,10 @@
     "start": "pm2 startOrRestart ecosystem.json --env production --watch",
     "deploy": "pm2 deploy ecosystem.json production --force",
     "travis-deploy": "if-env TRAVIS_BRANCH=master TRAVIS_PULL_REQUEST=false && npm run release || echo 'Deploy is not run'",
-    "upgrade": "ncu -u && npm install",
+    "upgrade": "ncu -u -x ejs && npm install",
     "dev": "PORT=5002 concurrently 'nodemon --inspect app' 'open http://localhost:${PORT}'",
-    "release": "ssh-keyscan 192.241.157.86 >> ~/.ssh/known_hosts && npm run deploy"
+    "release": "ssh-keyscan 192.241.157.86 >> ~/.ssh/known_hosts && npm run deploy",
+    "reinstall": "rm -rf node_modules package-lock.json && npm i"
   },
   "config": {
     "validate-commit-msg": {
@@ -60,7 +61,7 @@
   "dependencies": {
     "body-parser": "^1.19.0",
     "deep-equal": "^1.1.1",
-    "ejs": "^3.0.1",
+    "ejs": "^2.7.1",
     "express": "^4.17.1",
     "lodash": "^4.17.15",
     "mongoose": "^5.8.0"
