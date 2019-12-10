@@ -46,23 +46,23 @@
   },
   "homepage": "https://github.com/circlecell/dns-lookup.com#readme",
   "devDependencies": {
-    "concurrently": "^5.0.0",
-    "eslint": "^6.6.0",
+    "concurrently": "^5.0.1",
+    "eslint": "^6.7.2",
     "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-import": "^2.19.1",
     "ghooks": "^2.0.4",
     "if-env": "^1.0.4",
-    "nodemon": "^1.19.4",
-    "npm-check-updates": "^3.2.1",
+    "nodemon": "^2.0.1",
+    "npm-check-updates": "^3.2.2",
     "open-cli": "^5.0.0",
     "validate-commit-msg": "^2.14.0"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
-    "deep-equal": "^1.1.0",
-    "ejs": "^2.7.1",
+    "deep-equal": "^1.1.1",
+    "ejs": "^3.0.1",
     "express": "^4.17.1",
     "lodash": "^4.17.15",
-    "mongoose": "^5.7.9"
+    "mongoose": "^5.8.0"
   }
 }
