@@ -19,7 +19,7 @@
       "ref"  : "origin/master",
       "repo" : "git@github.com:circlecell/dns-lookup.com.git",
       "path" : "/var/web/dns-lookup.com",
-      "ssh_options": ["StrictHostKeyChecking=no", "PasswordAuthentication=no"],
+      "ssh_options": ["StrictHostKeyChecking=yes", "PasswordAuthentication=yes"],
       "post-deploy": "npm ci && npm start"
     },
   }
