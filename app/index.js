@@ -84,7 +84,6 @@ app.get('/:domain', async (req, res, next) => {
   return next();
 });
 
-
 app.get('/:domain/:id?', (req, res) => {
   const { records, error } = req;
   const { domain } = req.params;
@@ -100,10 +99,8 @@ app.get('/:domain/:id?', (req, res) => {
   }
 });
 
-
 app.get('/', (req, res) => {
   res.render('layout.ejs');
 });
-
 
 app.listen(process.env.PORT);

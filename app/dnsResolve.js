@@ -37,7 +37,6 @@ function getTypeByDNSResolver(resolver) {
   return type;
 }
 
-
 function resolveOneByOne(domain) {
   return new Promise((resolve) => {
     let resolvedCount = 0;
@@ -106,6 +105,5 @@ async function dnsResolve(domain) {
     return resolveOneByOne(domain);
   }
 }
-
 
 module.exports = dnsResolve;
