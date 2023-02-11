@@ -53,7 +53,7 @@
     "eslint-plugin-import": "^2.23.4",
     "ghooks": "^2.0.4",
     "if-env": "^1.0.4",
-    "nodemon": "^2.0.12",
+    "nodemon": "^2.0.20",
     "open-cli": "^7.0.0",
     "validate-commit-msg": "^2.14.0"
   },
